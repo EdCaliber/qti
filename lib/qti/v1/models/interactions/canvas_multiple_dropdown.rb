@@ -6,7 +6,7 @@ module Qti
           # This will know if a class matches
           def self.matches(node, parent)
             field_entry = node.xpath('.//xmlns:fieldentry')[0]
-            return false unless field_entry&.text == 'multiple_dropdowns_question'
+            return false unless field_entry.try(:text) == 'multiple_dropdowns_question'
             new(node, parent)
           end
 

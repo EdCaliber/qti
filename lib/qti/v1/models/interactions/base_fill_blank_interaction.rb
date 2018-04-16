@@ -37,7 +37,7 @@ module Qti
             blank_id = nil
             node.xpath('.//xmlns:response_lid').children.map do |response_lid_node|
               if stem_item.include?(response_lid_node.text)
-                blank_id = response_lid_node.parent.attributes['ident']&.value
+                blank_id = response_lid_node.parent.attributes['ident'].try(:value)
               end
             end
             blank_id

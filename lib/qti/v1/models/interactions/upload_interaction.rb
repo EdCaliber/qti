@@ -10,7 +10,7 @@ module Qti
             )
             return false unless meta_node.present?
             type_node = meta_node.at_xpath('.//xmlns:fieldentry')
-            return false unless type_node&.text() == 'file_upload_question'
+            return false unless type_node.try(:text) == 'file_upload_question'
             new(node, parent)
           end
 
