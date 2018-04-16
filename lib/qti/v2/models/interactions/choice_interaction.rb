@@ -18,11 +18,11 @@ module Qti
           end
 
           def max_choices_count
-            @node.attributes['maxChoices']&.value&.to_i
+            @node.attributes['maxChoices'].try(:value).try(:to_i)
           end
 
           def min_choices_count
-            @node.attributes['minChoices']&.value&.to_i
+            @node.attributes['minChoices'].try(:value).try(:to_i)
           end
 
           private

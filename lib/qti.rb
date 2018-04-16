@@ -16,6 +16,10 @@ module Qti
       @import = Qti::Models::Manifest.from_path!(@path, @package_root).assessment_test
     end
 
+    def self.from_string(string)
+      @import = Qti::Models::Manifest.from_string!(content: string).assessment_test
+    end
+
     def test_object
       @import
     end

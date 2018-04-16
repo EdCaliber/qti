@@ -20,7 +20,7 @@ module Qti
             end
 
             def shuffled?
-              node.at_xpath('.//xmlns:matchInteraction').attributes['shuffle']&.value.try(:downcase) == 'true'
+              node.at_xpath('.//xmlns:matchInteraction').attributes['shuffle'].try(:value).try(:downcase) == 'true'
             end
 
             def answers

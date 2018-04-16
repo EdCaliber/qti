@@ -21,7 +21,7 @@ module Qti
           end
 
           def shuffled?
-            @node.at_xpath('.//xmlns:render_choice/@shuffle')&.value.try(:downcase) == 'yes'
+            @node.at_xpath('.//xmlns:render_choice/@shuffle').try(:value).try(:downcase) == 'yes'
           end
 
           def scoring_data_structs
@@ -29,7 +29,7 @@ module Qti
           end
 
           def rcardinality
-            @rcardinality ||= @node.at_xpath('.//xmlns:response_lid/@rcardinality')&.value || 'Single'
+            @rcardinality ||= @node.at_xpath('.//xmlns:response_lid/@rcardinality').try(:value) || 'Single'
           end
         end
       end

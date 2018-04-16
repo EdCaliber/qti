@@ -17,7 +17,7 @@ module Qti
               :start,
               :end
             ).new(
-              gte_node.attributes['respident']&.value,
+              gte_node.attributes['respident'].try(:value),
               'withinARange',
               gte_node.content,
               lte_node.content

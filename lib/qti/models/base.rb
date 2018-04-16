@@ -11,7 +11,7 @@ module Qti
   module Models
     class Base
       attr_reader :doc, :path, :package_root
-      attr_accessor :manifest
+      attr_accessor :manifest, :is_from_string, :file_content
 
       ELEMENTS_REMAP = {
         'prompt' => 'div',
@@ -54,14 +54,24 @@ module Qti
         Sanitize::Config::RELAXED.merge transformers: transformers
       end
 
-      def self.from_path!(path, package_root = nil)
-        new(path: path, package_root: package_root)
+      def self.from_string!(string, package_root = nil)
+        new(path: nil, content: string, html: false)
       end
 
-      def initialize(path:, package_root: nil, html: false)
-        @path = path
-        self.package_root = package_root || File.dirname(path)
-        @doc = html ? parse_html(File.read(path)) : parse_xml(File.read(path))
+      def self.from_path!(path, package_root = nil)
+        new(path: path, content: nil, package_root: package_root)
+      end
+
+      def initialize(path:, content:, package_root: nil, html: false)
+        if path
+          @path = path
+          self.package_root = package_root || File.dirname(path)
+          @doc = html ? parse_html(File.read(path)) : parse_xml(File.read(path))
+        elsif content
+          @file_content = content
+          @is_from_string = true
+          @doc = html ? parse_html(content[:content]) : parse_xml(content[:content])
+        end
         raise ArgumentError unless @doc
         preprocess_xml_doc(@doc) unless html
       end
@@ -102,6 +112,7 @@ module Qti
 
       def remap_href_path(href)
         return nil unless href
+        return nil if @is_from_string
         path = File.join(File.dirname(@path), href)
         if @package_root.nil?
           raise Qti::ParseError, "Potentially unsafe href '#{href}'" if href.split('/').include?('..')

@@ -9,6 +9,7 @@ module Qti
         end
 
         def return_inner_content!(node)
+          return '' if node.child.nil?
           if node.child.cdata? || node.inner_html.include?('&gt' || '&lt')
             node.text
           else

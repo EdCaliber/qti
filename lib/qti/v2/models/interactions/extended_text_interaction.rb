@@ -14,15 +14,15 @@ module Qti
 
           # not used yet
           def expected_lines
-            @node.attributes['expectedLines']&.value&.to_i || 0
+            @node.attributes['expectedLines'].try(:value).try(:to_i) || 0
           end
 
           def max_strings
-            @node.attributes['maxStrings']&.value&.to_i
+            @node.attributes['maxStrings'].try(:value).try(:to_i)
           end
 
           def min_strings
-            @node.attributes['minStrings']&.value&.to_i || 0
+            @node.attributes['minStrings'].try(:value).try(:to_i) || 0
           end
         end
       end

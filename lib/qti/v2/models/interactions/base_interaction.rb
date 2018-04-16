@@ -15,7 +15,7 @@ module Qti
           end
 
           def shuffled?
-            @node.attributes['shuffle']&.value.try(:downcase) == 'true'
+            @node.attributes['shuffle'].try(:value).try(:downcase) == 'true'
           end
 
           def scoring_data_structs

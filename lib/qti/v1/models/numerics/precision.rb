@@ -20,7 +20,7 @@ module Qti
               :precision,
               :precision_type
             ).new(
-              equal_node.attributes['respident']&.value,
+              equal_node.attributes['respident'].try(:value),
               'preciseResponse',
               value,
               precision.to_s,

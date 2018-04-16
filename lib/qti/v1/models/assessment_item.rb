@@ -32,7 +32,7 @@ module Qti
         end
 
         def qti_metadata_children
-          @doc.at_xpath('.//xmlns:qtimetadata')&.children
+          @doc.at_xpath('.//xmlns:qtimetadata').try(:children)
         end
 
         def points_possible_qti_metadata?
@@ -64,12 +64,35 @@ module Qti
         end
 
         def decvar_maxvalue
-          @doc.at_xpath('.//xmlns:decvar/@maxvalue')&.value&.to_i ||
-            @doc.at_xpath('.//xmlns:decvar/@defaultval')&.value&.to_i || 0
+          @doc.at_xpath('.//xmlns:decvar/@maxvalue').try(:value).try(:to_i) ||
+            @doc.at_xpath('.//xmlns:decvar/@defaultval').try(:value).try(:to_i) || 0
         end
 
         def rcardinality
           @rcardinality ||= @doc.at_xpath('.//xmlns:response_lid/@rcardinality').value
+        end
+
+        def correct_responses
+          case interaction_model
+          when V1::Models::Interactions::ChoiceInteraction
+            node = @doc.at_xpath('.//xmlns:respcondition/xmlns:conditionvar/xmlns:varequal')
+            return [] if node.blank?
+            node.children.map(&:text).map(&:squish)
+          when V1::Models::Interactions::MatchInteraction
+            alpha = ('A'..'Z').to_a.prepend(0)
+            a = []
+            elements = @doc.xpath('.//xmlns:resprocessing/xmlns:respcondition/xmlns:conditionvar/xmlns:varequal')
+            elements.map do |n|
+              answer = n.attribute('respident').try(:value).split('_')
+              answer[1] = alpha.index(answer[1]) || answer[1]
+              [ n.text.squish, answer.join('_') ]
+            end
+          when V1::Models::Interactions::StringInteraction
+            response ||= @doc.xpath('.//xmlns:itemfeedback/xmlns:flow_mat/xmlns:material/xmlns:mattext').text
+            return response
+          else
+            return []
+          end
         end
 
         def interaction_model

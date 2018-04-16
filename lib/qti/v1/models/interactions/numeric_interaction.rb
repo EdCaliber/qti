@@ -6,7 +6,7 @@ module Qti
           # This will know if a class matches
           def self.matches(node, parent)
             first_match = node.at_xpath('.//xmlns:render_fib')
-            return false unless first_match && first_match.attributes['fibtype']&.value == 'Decimal'
+            return false unless first_match && first_match.attributes['fibtype'].try(:value) == 'Decimal'
             return false if node.xpath('.//xmlns:render_fib').count > 1
             new(node, parent)
           end

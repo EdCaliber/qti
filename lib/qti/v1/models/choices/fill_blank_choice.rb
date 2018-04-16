@@ -11,12 +11,12 @@ module Qti
           end
 
           def identifier
-            @identifier ||= @node.attributes['respident']&.value ||
-                            @node.attributes['ident']&.value
+            @identifier ||= @node.attributes['respident'].try(:value) ||
+                            @node.attributes['ident'].try(:value)
           end
 
           def parent_identifier
-            @parent_identifier ||= @node.parent.parent.attributes['ident']&.value
+            @parent_identifier ||= @node.parent.parent.attributes['ident'].try(:value)
           end
 
           def item_body

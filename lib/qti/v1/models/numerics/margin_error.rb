@@ -18,7 +18,7 @@ module Qti
               :margin,
               :margin_type
             ).new(
-              equal_node.attributes['respident']&.value,
+              equal_node.attributes['respident'].try(:value),
               'marginOfError',
               equal_node.content.to_f.to_s,
               margin,

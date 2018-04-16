@@ -19,7 +19,7 @@ module Qti
         end
 
         def title
-          @title ||= xpath_with_single_check('//html/head/title')&.content
+          @title ||= xpath_with_single_check('//html/head/title').try(:content)
         end
 
         def stimulus_type

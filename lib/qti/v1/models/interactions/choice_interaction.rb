@@ -7,7 +7,7 @@ module Qti
           def self.matches(node, parent)
             matches = node.xpath('.//xmlns:response_lid')
             return false if matches.count > 1 || matches.empty?
-            rcardinality = matches.first.attributes['rcardinality']&.value || 'Single'
+            rcardinality = matches.first.attributes['rcardinality'].try(:value) || 'Single'
             return false if rcardinality == 'Ordered'
             new(node, parent)
           end
@@ -43,7 +43,7 @@ module Qti
 
           def scoring_data(choice_nodes)
             set_var_nodes = choice_nodes.select do |choice_node|
-              choice_node.at_xpath('.//xmlns:setvar')&.content&.to_f&.positive?
+              choice_node.at_xpath('.//xmlns:setvar').try(:content).try(:to_f).try(:positive?)
             end
             set_var_nodes.map do |value_node|
               ScoringData.new(value_node.at_xpath('.//xmlns:varequal').content, rcardinality)

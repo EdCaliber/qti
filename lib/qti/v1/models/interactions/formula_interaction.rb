@@ -23,7 +23,8 @@ module Qti
           def solutions
             node.xpath('.//xmlns:var_set').map do |anode|
               {
-                inputs: vars_at_node(anode),
+                id: anode.attributes['ident'].try(:value),
+                input: vars_at_node(anode),
                 output: anode.at_xpath('.//xmlns:answer').text
               }
             end
@@ -33,10 +34,10 @@ module Qti
             varlist = @node.at_xpath('.//xmlns:vars')
             varlist.xpath('.//xmlns:var').map do |vnode|
               {
-                name: vnode.attributes['name']&.value,
+                name: vnode.attributes['name'].try(:value),
                 min: vnode.at_xpath('.//xmlns:min').text,
                 max: vnode.at_xpath('.//xmlns:max').text,
-                precision: vnode.attributes['scale']&.value
+                precision: vnode.attributes['scale'].try(:value)
               }
             end
           end
@@ -53,7 +54,7 @@ module Qti
           end
 
           def formula_decimal_places
-            @node.at_xpath('.//xmlns:formulas/@decimal_places')&.value
+            @node.at_xpath('.//xmlns:formulas/@decimal_places').try(:value)
           end
 
           def formulas
@@ -65,7 +66,7 @@ module Qti
           def vars_at_node(parent_node)
             parent_node.xpath('.//xmlns:var').map do |vnode|
               {
-                name: vnode.attributes['name']&.value,
+                name: vnode.attributes['name'].try(:value),
                 value: vnode.text
               }
             end

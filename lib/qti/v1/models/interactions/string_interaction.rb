@@ -14,7 +14,7 @@ module Qti
           private
 
           def rcardinality
-            @rcardinality ||= @node.at_xpath('.//xmlns:response_str/@rcardinality').value
+            @rcardinality ||= @node.at_xpath('.//xmlns:response_str/@rcardinality').try(:value)
           end
         end
       end

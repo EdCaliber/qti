@@ -16,7 +16,7 @@ module Qti
               :type,
               :value
             ).new(
-              equal_node.attributes['respident']&.value,
+              equal_node.attributes['respident'].try(:value),
               'exactResponse',
               equal_node.content
             )
