@@ -16,7 +16,8 @@ Gem::Specification.new do |s|
   s.test_files    = s.files.grep(%r{^(test|spec|features)/})
   s.require_paths = ['lib']
 
-  s.add_dependency 'activesupport', '>= 4.2.8', '< 5.2'
+  #s.add_dependency 'activesupport', '>= 4.2.8', '< 5.2'
+  s.add_dependency 'activesupport', '>= 4.2.8'
   s.add_dependency 'dry-struct', '~> 0.2.1'
   s.add_dependency 'dry-types', '~> 0.12.0'
   s.add_dependency 'rubyzip', '~> 1.1'
